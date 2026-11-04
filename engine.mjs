@@ -20,6 +20,7 @@ export const ACTIONS = [
 
 const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
 const round = (v,n=1) => Math.round(v*10**n)/10**n;
+const vi = v => Number(v).toLocaleString('vi-VN',{maximumFractionDigits:1});
 function random(world) {
   let x=world.rng|0;
   x^=x<<13; x^=x>>>17; x^=x<<5;
@@ -64,7 +65,7 @@ export function makeWorld(seed=Date.now()) {
     cells.forEach(t=>{if(t.land)t.region=id;});
   }
   for(const r of world.regions) r.neighbors=world.regions.filter(n=>Math.abs(n.rx-r.rx)+Math.abs(n.ry-r.ry)===1).map(n=>n.id);
-  record(world,'Khởi nguyên',`Bản ghi bắt đầu tại năm 0. ${world.regions.length} cộng đồng đã tồn tại; nguồn gốc sâu hơn chưa được xác lập.`,null,'start');
+  record(world,'Mốc quan sát',`Bản ghi bắt đầu tại năm 0. ${world.regions.length} cộng đồng đã tồn tại; nguồn gốc sâu hơn chưa được xác lập.`,null,'start');
   snapshot(world);
   return world;
 }
@@ -145,7 +146,7 @@ export function step(w) {
     r.tension=clamp(r.tension+shortage*.055+crowding*.016+disparity*.006+r.industry*.001+(1-r.trust)*.002-.0045,0,1);
     r.last={rain:round(rain,2),water:round(water,2),yield:round(yieldFood),shortage:round(shortage,2),deaths:round(deaths,3),births:round(births,3),temperature:round(temperature,2)};
     if(r.rainBoost)r.rainBoost--;
-    if(shortage>.28 && priorShortage<=.28)record(w,'Mất mùa ở '+r.name,`Nước ${round(water,2)}, sản lượng ${round(yieldFood)} và lương dự trữ không đủ cho ${round(previous.get(r.id).pop)} nghìn người; thiếu ${Math.round(shortage*100)}% nhu cầu.`,r.id,'famine');
+    if(shortage>.28 && priorShortage<=.28)record(w,'Mất mùa ở '+r.name,`Nước ${vi(round(water,2))}, sản lượng ${vi(round(yieldFood))} và lương dự trữ không đủ cho ${vi(round(previous.get(r.id).pop))} nghìn người; thiếu ${Math.round(shortage*100)}% nhu cầu.`,r.id,'famine');
     if(infection>.31 && previous.get(r.id).disease<=.31)record(w,'Dịch lan ở '+r.name,`Mức lây nhiễm lên ${Math.round(infection*100)}%; mật độ, đường giao thương và trạm y đều tác động đến diễn biến.`,r.id,'disease');
     if(r.pop<1 && previous.get(r.id).pop>=1)record(w,'Cộng đồng '+r.name+' tan rã','Dân số còn dưới một nghìn người; vùng không tiếp tục tự tăng trưởng.',r.id,'collapse');
   }
@@ -161,7 +162,7 @@ export function step(w) {
     if(moved<.05)continue;
     deltas.set(r.id,deltas.get(r.id)-moved);deltas.set(n.id,deltas.get(n.id)+moved);
     n.tension=clamp(n.tension+moved/Math.max(1,n.pop)*(.35-n.trust*.2),0,1);
-    if(moved>.5)record(w,'Di cư '+r.name+' → '+n.name,`${round(moved)} nghìn người rời vùng thiếu lương; ${n.name} có dư địa và lối vào mở.`,r.id,'migration');
+    if(moved>.5)record(w,'Di cư '+r.name+' → '+n.name,`${vi(round(moved))} nghìn người rời vùng thiếu lương; ${n.name} có dư địa và lối vào mở.`,r.id,'migration');
   }
   for(const r of w.regions)r.pop=round(Math.max(0,r.pop+deltas.get(r.id)));
   const fought=new Set();
@@ -175,10 +176,10 @@ export function step(w) {
       r.pop=round(Math.max(0,r.pop-lossR));n.pop=round(Math.max(0,n.pop-lossN));
       r.wealth=Math.max(0,r.wealth-7);n.wealth=Math.max(0,n.wealth-5);
       r.tension=clamp(r.tension-.18,0,1);n.tension=clamp(n.tension+.1,0,1);
-      record(w,'Xung đột '+r.name+' – '+n.name,`Căng thẳng tại ${r.name} vượt ngưỡng; hai vùng mất ${round(lossR+lossN)} nghìn người và tài sản.`,r.id,'conflict');
+      record(w,'Xung đột '+r.name+' – '+n.name,`Căng thẳng tại ${r.name} vượt ngưỡng; hai vùng mất ${vi(round(lossR+lossN))} nghìn người và tài sản.`,r.id,'conflict');
     }
   }
-  if(w.year%10===0)record(w,`Mốc năm ${w.year}`,`Toàn thế giới có ${totals(w).pop} nghìn người tại ${totals(w).communities} cộng đồng còn sống.`,null,'milestone');
+  if(w.year%10===0)record(w,`Mốc năm ${w.year}`,`Toàn thế giới có ${vi(totals(w).pop)} nghìn người tại ${totals(w).communities} cộng đồng còn sống.`,null,'milestone');
   snapshot(w); return w;
 }
 export function advance(w,years=1){for(let i=0;i<years;i++)step(w);return w;}
