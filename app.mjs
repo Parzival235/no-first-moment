@@ -1,4 +1,4 @@
-import {WIDTH,HEIGHT,ACTIONS,makeWorld,advance,intervene,totals,serialize,restore} from './engine.mjs';
+import {WIDTH,HEIGHT,ACTIONS,makeWorld,advance,intervene,totals,serialize,restore} from './engine.mjs?v=2';
 
 const $=id=>document.getElementById(id);
 const STORAGE='dia-gioi-world-v1';
