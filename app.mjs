@@ -94,16 +94,24 @@ function preview(a){
     const target=a.scope==='region'?region():null;
     const baseline=structuredClone(world),changed=structuredClone(world);
     intervene(changed,a.id,selected);
+    const baseline1=structuredClone(baseline),changed1=structuredClone(changed);
+    advance(baseline1,1);advance(changed1,1);
     advance(baseline,5);advance(changed,5);
     pending={id:a.id,region:selected,year:world.year};
     const after=target?changed.regions.find(r=>r.id===target.id):null;
     const before=target?baseline.regions.find(r=>r.id===target.id):null;
     const rows=[['Dân số toàn thế giới',totals(baseline).pop,totals(changed).pop,' nghìn']];
-    if(after&&before){rows.push([`Dân số ${target.name}`,before.pop,after.pop,' nghìn'],[`Kho lương ${target.name}`,before.food,after.food,' nghìn người-năm'],[`Sức khỏe ${target.name}`,before.health*100,after.health*100,'%']);}
+    if(a.scope==='world')rows.push(['Lệch nhiệt khí hậu',baseline.climate,changed.climate,'']);
+    if(after&&before){
+      rows.push([`Dân số ${target.name}`,before.pop,after.pop,' nghìn'],[`Kho lương ${target.name}`,before.food,after.food,' nghìn người-năm']);
+      const metrics={rain:['Nước năm đầu',r=>r.last.water,''],dam:['Nước năm thứ 5',r=>r.last.water,''],forest:['Rừng',r=>r.forest*100,'%'],granary:['Kho lương năm đầu',r=>r.food,' nghìn người-năm'],clinic:['Sức khỏe',r=>r.health*100,'%'],school:['Tri thức',r=>r.knowledge,''],road:['Hạ tầng',r=>r.infra,''],mine:['Tài sản',r=>r.wealth,''],open:['Độ mở biên',r=>r.openness*100,'%'],close:['Độ mở biên',r=>r.openness*100,'%'],treaty:['Căng thẳng',r=>r.tension*100,'%']};
+      const [label,value,unit]=metrics[a.id],first=['rain','granary'].includes(a.id),b=(first?baseline1:baseline).regions.find(r=>r.id===target.id),c=(first?changed1:changed).regions.find(r=>r.id===target.id);
+      rows.push([`${label} ${target.name}`,value(b),value(c),unit]);
+    }
     if(a.id==='dam'&&target){const down=world.regions.find(r=>r.rx===target.rx&&r.ry===target.ry+1);if(down){const b=baseline.regions.find(r=>r.id===down.id),c=changed.regions.find(r=>r.id===down.id);rows.push([`Kho lương ${down.name} (hạ lưu)`,b.food,c.food,' nghìn người-năm']);}}
     const box=$('decision');box.replaceChildren();box.hidden=false;
     const title=document.createElement('h3');title.textContent=`Nếu ${a.name.toLowerCase()}${target?' tại '+target.name:''}`;
-    const note=document.createElement('p');note.textContent='Một nhánh giả định sau 5 năm, so với thế giới không can thiệp. Đây là kết quả của mô hình, không phải lời tiên tri.';
+    const note=document.createElement('p');note.textContent='Hai nhánh từ cùng trạng thái. Các chỉ số sau 5 năm, trừ hàng ghi "năm đầu". Đây là kết quả mô hình, không phải lời tiên tri.';
     const table=document.createElement('table');const head=document.createElement('tr');for(const label of ['Chỉ số','Giữ nguyên','Can thiệp']){const th=document.createElement('th');th.textContent=label;head.append(th);}table.append(head);
     for(const [label,b,c,unit] of rows){const tr=document.createElement('tr');for(const value of [label,n(b,1)+unit,n(c,1)+unit]){const td=document.createElement('td');td.textContent=value;tr.append(td);}table.append(tr);}
     const controls=document.createElement('div');controls.className='decision-controls';const commit=document.createElement('button');commit.className='primary';commit.textContent='Thực hiện can thiệp';const cancel=document.createElement('button');cancel.textContent='Xem lựa chọn khác';
