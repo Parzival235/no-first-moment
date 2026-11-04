@@ -108,7 +108,7 @@ function preview(a){
       const [label,value,unit]=metrics[a.id],first=['rain','granary'].includes(a.id),b=(first?baseline1:baseline).regions.find(r=>r.id===target.id),c=(first?changed1:changed).regions.find(r=>r.id===target.id);
       rows.push([`${label} ${target.name}`,value(b),value(c),unit]);
     }
-    if(a.id==='dam'&&target){const down=world.regions.find(r=>r.rx===target.rx&&r.ry===target.ry+1);if(down){const b=baseline.regions.find(r=>r.id===down.id),c=changed.regions.find(r=>r.id===down.id);rows.push([`Kho lương ${down.name} (hạ lưu)`,b.food,c.food,' nghìn người-năm']);}}
+    if(a.id==='dam'&&target){const down=world.regions.find(r=>r.rx===target.rx&&r.ry===target.ry+1);if(down){const b=baseline.regions.find(r=>r.id===down.id),c=changed.regions.find(r=>r.id===down.id);rows.push([`Nước ${down.name} (hạ lưu)`,b.last.water,c.last.water,'']);}}
     const box=$('decision');box.replaceChildren();box.hidden=false;
     const title=document.createElement('h3');title.textContent=`Nếu ${a.name.toLowerCase()}${target?' tại '+target.name:''}`;
     const note=document.createElement('p');note.textContent='Hai nhánh từ cùng trạng thái. Các chỉ số sau 5 năm, trừ hàng ghi "năm đầu". Đây là kết quả mô hình, không phải lời tiên tri.';
