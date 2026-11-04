@@ -12,7 +12,7 @@ Một câu hỏi đủ cụ thể cho phiên bản kế tiếp: **Từ các quy 
 
 ## 2. Kiểm toán bản 01
 
-Mã hiện tại: `engine.mjs` tính từng năm cho khoảng 17–22 vùng cố định trên bản đồ 36 × 24 ô; `app.mjs` vẽ bản đồ, lịch sử, 13 can thiệp và hai nhánh so sánh. Mỗi vùng là một khối số gộp. Bản đồ và danh sách vùng được tạo lúc bắt đầu; không có quy tắc sinh một khu cư trú mới, tách cộng đồng hoặc dựng quan hệ xã hội mới.
+**Bản 01 tại thời điểm kiểm toán:** `engine.mjs` tính từng năm cho khoảng 17–22 vùng cố định trên bản đồ 36 × 24 ô; `app.mjs` vẽ bản đồ, lịch sử, 13 can thiệp và hai nhánh so sánh. Mỗi vùng là một khối số gộp. Bản đồ và danh sách vùng được tạo lúc bắt đầu; không có quy tắc sinh một khu cư trú mới, tách cộng đồng hoặc dựng quan hệ xã hội mới. Phần dưới giữ nguyên số đo của bản 01 để làm đối chứng cho các bản sau.
 
 ### Thử nghiệm lặp
 
@@ -72,6 +72,12 @@ Các phép đo trên có thể tái lập bằng `makeWorld`, `advance`, `interv
 **Chặng D — mở rộng theo bằng chứng.** Đưa mô phỏng sang Worker, lưu bằng IndexedDB, thêm sinh thái dài hạn và thể chế nếu các quy tắc hiện có tạo được lịch sử khác nhau qua thử nghiệm. Sau đó mới cân nhắc cá thể, ngôn ngữ, văn hóa, vũ trụ khác hoặc một tầng luật cho phép người chơi chỉnh quy tắc.
 
 **Để sau:** đồ họa 3D, hàng triệu tác nhân, LLM cho mọi nhân vật, hàng trăm nút can thiệp, mô hình “trước khi có gì”. Chúng làm tăng bề mặt hiển thị và chi phí trước khi giải được vấn đề nhân quả của bản hiện tại.
+
+## 8. Tiến độ sau kiểm toán
+
+Bản 02 đã tách `systems/random.mjs`, `systems/geography.mjs` và `systems/settlements.mjs`: thời tiết có địa chỉ ngẫu nhiên riêng; láng giềng phải thật sự chung biên giới đất; nước đi theo một cạnh thấp hơn; cộng đồng tự chọn sinh kế, trao lương và lập nơi ở. Tệp v1 được nâng lên v2 mà giữ năm và sự kiện cũ. Trong 100 hạt giống mới chạy không can thiệp đến năm 300, cả 100 bắt đầu với 8 cộng đồng và kết thúc trong khoảng 13–22; không có dân số/kho lương âm hay không hữu hạn trong mẫu. Tám bài kiểm thử tự động gồm phép thử bảo toàn khi trao đổi và lập nơi ở.
+
+Chưa hoàn thành: lưu lượng nước bảo toàn, các quyết định có cấu trúc để truy “vì sao”, thể chế, văn hóa, cá thể, diễn giải sai và quyền biết có giới hạn của người quan sát. Các mốc trên đo **độ vận hành của mô hình**, không xác nhận nó tái hiện lịch sử của một xã hội thật. Ranh giới mở rộng nằm trong [kiến trúc lĩnh vực](./kien-truc-linh-vuc.md).
 
 ## 7. Ba quyết định thiết kế còn mở
 
