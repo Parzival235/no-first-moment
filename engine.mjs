@@ -2,7 +2,7 @@
 // food is measured in thousand person-years. One step advances one year.
 import {hash,randomAt,RNG} from './systems/random.mjs';
 import {buildGeography} from './systems/geography.mjs';
-import {choosePolicies,exchange,foundSettlements} from './systems/settlements.mjs';
+import {choosePolicies,exchange,foundSettlements} from './systems/settlements.mjs?v=7';
 export const WIDTH = 36;
 export const HEIGHT = 24;
 export const ACTIONS = [

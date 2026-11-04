@@ -30,8 +30,8 @@ export function exchange(w,record){
     plans.push({from:r,to:n,amount});
   }
   for(const {from,to,amount} of plans){
-    from.food=round(from.food-amount);to.food=round(to.food+amount);
-    const paid=round(Math.min(to.wealth,amount*.3));to.wealth=round(to.wealth-paid);from.wealth=round(from.wealth+paid);
+    from.food-=amount;to.food+=amount;
+    const paid=round(Math.min(to.wealth,amount*.3));to.wealth-=paid;from.wealth+=paid;
     if(amount>=.5&&(from.lastTradePartner!==to.id||w.year%10===0))record(w,`${from.name} trao lương cho ${to.name}`,`${vi(amount)} nghìn người-năm lương chuyển qua biên trong năm ghi nhận; dòng trao đổi có thể tiếp diễn những năm sau.`,from.id,'trade');
     from.lastTradePartner=to.id;
   }
@@ -51,8 +51,8 @@ export function foundSettlements(w,record){
     if(people<1)continue;
     const provision=round(Math.min(r.food,people*.7),1),property=round(Math.min(r.wealth,4),1);
     r.pop=round(r.pop-people);target.pop=round(target.pop+people);
-    r.food=round(r.food-provision);target.food=round(target.food+provision);
-    r.wealth=round(r.wealth-property);target.wealth=round(target.wealth+property);
+    r.food-=provision;target.food+=provision;
+    r.wealth-=property;target.wealth+=property;
     target.health=r.health;target.knowledge=round(r.knowledge*.85);target.trust=r.trust;target.inhabitedBefore=true;
     r.lastFounded=w.year;target.lastFounded=w.year;
     record(w,`${target.name} được định cư`,`${vi(people)} nghìn người từ ${r.name} mang ${vi(provision)} nghìn người-năm lương tới vùng đất mới.`,target.id,'founding');
