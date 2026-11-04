@@ -11,14 +11,49 @@ test('same seed and decisions replay the same history, including after import',(
   assert.notEqual(serialize(makeWorld(4815)),serialize(makeWorld(4816)));
 });
 
-test('an upstream dam changes water available to a southern neighbor',()=>{
+test('a dam changes water along the mapped downstream edge',()=>{
   const control=makeWorld(777),changed=makeWorld(777);
-  const upstream=changed.regions.find(r=>changed.regions.some(n=>n.rx===r.rx&&n.ry===r.ry+1));
+  const upstream=changed.regions.find(r=>r.pop>=1&&changed.regions.find(n=>n.id===r.downstream)?.pop>=1);
   assert.ok(upstream);
-  const south=changed.regions.find(n=>n.rx===upstream.rx&&n.ry===upstream.ry+1);
+  const down=changed.regions.find(n=>n.id===upstream.downstream);
   intervene(changed,'dam',upstream.id);step(control);step(changed);
-  assert.ok(changed.regions.find(r=>r.id===south.id).last.water<control.regions.find(r=>r.id===south.id).last.water);
+  assert.ok(changed.regions.find(r=>r.id===down.id).last.water<control.regions.find(r=>r.id===down.id).last.water);
   assert.ok(changed.regions.find(r=>r.id===upstream.id).last.water>control.regions.find(r=>r.id===upstream.id).last.water);
+});
+
+test('branches share weather even after their event histories diverge',()=>{
+  const control=makeWorld(1);advance(control,100);
+  const changed=structuredClone(control);
+  intervene(changed,'dam',changed.regions.find(r=>r.pop>=1).id);
+  for(let i=0;i<40;i++){
+    step(control);step(changed);
+    assert.equal(control.lastWeather,changed.lastWeather,`year ${control.year}`);
+  }
+  assert.notEqual(serialize(control),serialize(changed));
+});
+
+test('unoccupied districts can be founded without player intervention',()=>{
+  const w=makeWorld(1),initial=w.regions.filter(r=>r.pop>=1).length;
+  assert.equal(initial,8);
+  advance(w,100);
+  assert.ok(w.history.some(e=>e.kind==='decision'));
+  assert.ok(w.history.some(e=>e.kind==='founding'));
+  assert.ok(w.regions.filter(r=>r.pop>=1).length>initial);
+  assert.ok(w.regions.some(r=>r.inhabitedBefore&&r.lastFounded>0));
+});
+
+test('old saves are upgraded in place and retain their history',()=>{
+  const old=makeWorld(482);advance(old,12);
+  old.version=1;
+  for(const r of old.regions){delete r.downstream;delete r.policy;delete r.lastPolicyYear;delete r.lastTradePartner;delete r.lastFounded;delete r.inhabitedBefore;}
+  const before=old.history.map(e=>e.id);
+  const upgraded=restore(serialize(old));
+  assert.equal(upgraded.version,2);
+  assert.equal(upgraded.year,12);
+  assert.deepEqual(upgraded.history.slice(1).map(e=>e.id),before);
+  assert.ok(upgraded.regions.every(r=>typeof r.policy==='string'&&Array.isArray(r.neighbors)));
+  advance(upgraded,10);
+  assert.equal(upgraded.year,22);
 });
 
 test('clinic reduces infection when starting from the same epidemic state',()=>{

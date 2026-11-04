@@ -6,12 +6,12 @@
   <meta name="theme-color" content="#101a22">
   <title>ĐỊA GIỚI / Đài quan sát</title>
   <meta name="description" content="Một thế giới mô phỏng để quan sát, can thiệp và lần theo hậu quả.">
-  <link rel="stylesheet" href="./style.css?v=2">
+  <link rel="stylesheet" href="./style.css?v=6">
 </head>
 <body>
   <div class="shell">
     <header class="masthead">
-      <div class="brand"><span class="sigil">◎</span><div><div class="eyebrow">HỒ SƠ THẾ GIỚI · BẢN THỬ NGHIỆM 01</div><h1>ĐỊA GIỚI<span class="accent">.</span></h1></div></div>
+      <div class="brand"><span class="sigil">◎</span><div><div class="eyebrow">HỒ SƠ THẾ GIỚI · BẢN THỬ NGHIỆM 02</div><h1>ĐỊA GIỚI<span class="accent">.</span></h1></div></div>
       <div class="top-actions"><span id="save-state" class="save-state">● Đã lưu</span><button class="quiet" id="export-btn">Xuất lịch sử</button><button class="quiet" id="import-btn">Nhập tệp lưu</button><input id="import-file" type="file" accept="application/json,.json" hidden></div>
     </header>
     <section class="prologue" aria-label="Lời mở">
@@ -25,9 +25,9 @@
           <div class="panel-head"><div><span class="kicker">01 / BỀ MẶT</span><h2>Một thế giới đang đổi thay</h2></div><div class="year-badge">NĂM <strong id="year">0000</strong></div></div>
           <div class="map-toolbar"><label for="map-mode">LỚP BẢN ĐỒ</label><select id="map-mode"><option value="terrain">Địa hình</option><option value="food">Kho lương</option><option value="disease">Dịch bệnh</option><option value="tension">Căng thẳng</option></select><span id="map-explain">Chọn một cộng đồng trên bản đồ để quan sát.</span></div>
           <div class="map-wrap"><canvas id="world-map" width="720" height="480" role="img" aria-label="Bản đồ các vùng đất. Có thể chọn vùng bằng danh sách bên phải."></canvas><div class="map-key"><span><i id="scale-low" class="land-key"></i> <span id="scale-low-label">ĐẤT</span></span><span><i id="scale-high" class="sea-key"></i> <span id="scale-high-label">BIỂN</span></span><span><i class="settlement-key"></i> CỘNG ĐỒNG</span></div></div>
-          <div class="controls"><button id="one-year" class="primary">Trôi 1 năm <span>→</span></button><button id="ten-years">Trôi 10 năm</button><button id="run" aria-pressed="false">▶ Tự chạy</button><button id="jump-actions">Can thiệp ↓</button><span class="control-hint">Mỗi năm cập nhật khí hậu, mùa màng, dân số, dịch và di cư.</span></div>
+          <div class="controls"><button id="one-year" class="primary">Trôi 1 năm <span>→</span></button><button id="ten-years">Trôi 10 năm</button><button id="run" aria-pressed="false">▶ Tự chạy</button><button id="jump-actions">Can thiệp ↓</button><span class="control-hint">Cộng đồng tự chọn sinh kế, trao đổi và lập nơi ở mới qua từng năm.</span></div>
         </section>
-        <section class="panel history-panel"><div class="panel-head"><div><span class="kicker">02 / DẤU VẾT</span><h2>Lịch sử tự ghi</h2></div><select id="event-filter" aria-label="Lọc lịch sử"><option value="all">Mọi sự kiện</option><option value="choice">Can thiệp</option><option value="famine">Mất mùa</option><option value="migration">Di cư</option><option value="disease">Dịch</option><option value="conflict">Xung đột</option></select></div><div id="history" class="history-list" aria-live="polite"></div></section>
+        <section class="panel history-panel"><div class="panel-head"><div><span class="kicker">02 / DẤU VẾT</span><h2>Lịch sử tự ghi</h2></div><select id="event-filter" aria-label="Lọc lịch sử"><option value="all">Mọi sự kiện</option><option value="decision">Tự quyết</option><option value="founding">Định cư</option><option value="trade">Trao đổi</option><option value="choice">Can thiệp</option><option value="famine">Mất mùa</option><option value="migration">Di cư</option><option value="disease">Dịch</option><option value="conflict">Xung đột</option></select></div><div id="history" class="history-list" aria-live="polite"></div></section>
       </main>
       <aside>
         <section class="panel overview"><span class="kicker">TRẠNG THÁI / TOÀN THẾ GIỚI</span><div class="metric-major"><strong id="population">—</strong><span>nghìn người</span></div><div class="metric-grid"><div><small>Cộng đồng còn sống</small><strong id="communities">—</strong></div><div><small>Lương dự trữ</small><strong id="food">—</strong></div><div><small>Tri thức trung bình</small><strong id="knowledge">—</strong></div><div><small>Biến đổi nhiệt</small><strong id="climate">—</strong></div></div><div class="sparkline-label">DÂN SỐ QUA THỜI GIAN</div><canvas id="trend" width="400" height="100" role="img" aria-label="Đường biến động dân số"></canvas></section>
@@ -38,6 +38,6 @@
     </div>
     <footer><span>ĐỊA GIỚI · MÔ PHỎNG KHÁM PHÁ</span><span>Quy luật được công bố trong mã nguồn · Lịch sử được lưu trên thiết bị này</span></footer>
   </div>
-  <script type="module" src="./app.mjs?v=4"></script>
+  <script type="module" src="./app.mjs?v=6"></script>
 </body>
 </html>
